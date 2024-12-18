@@ -1,0 +1,50 @@
+version: '3'
+
+volumes:
+  pg_data:
+  static:
+
+services:
+  frontend:
+    hostname: frontend
+    container_name: frontend
+    build:
+      context: ./frontend
+    volumes:
+      - static:/app/build
+  
+  backend:
+    hostname: backend
+    container_name: backend
+    build:
+      context: ./backend
+      args:
+      - BACK_DB_NAME=${BACK_DB_NAME}
+      - BACK_DB_USER=${BACK_DB_USER}
+      - BACK_USER_PASSWORD=${BACK_USER_PASSWORD}
+      - BACK_DB_HOST=${BACK_DB_HOST}
+      - BACK_DB_PORT=${BACK_DB_PORT}
+    env_file: ".env"
+    volumes:
+      - static:/app/frontend
+    depends_on:
+      - postgres
+      - frontend
+  
+  gateway:
+    hostname: gateway
+    container_name: gateway
+    build:
+      context: ./nginx
+    volumes:
+      - static:/static
+    ports:
+      - 80:80
+  
+  postgres:
+    image: postgres:13.10
+    hostname: postgres
+    container_name: postgres
+    env_file: .env
+    volumes:
+      - pg_data:/var/lib/postgresql/data
