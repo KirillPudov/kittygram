@@ -6,6 +6,26 @@ on:
       - main
 
 jobs:
+  auto_yandex_tests:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Executing remote ssh commands to deploy
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USER }}
+        key: ${{ secrets.SSH_KEY }}
+    - shell: bash
+      env:
+        GITHUB_USER_NAME: ${{ secrets.GITHUB_USER_NAME }}
+        DOMAIN: ${{ secrets.DOMAIN }}
+        DOCKER_HUB_USER_NAME: ${{ secrets.DOCKER_HUB_USER_NAME }}
+      run: |
+        cd /opt/kittiygram
+        echo "repo_owner: $GITHUB_USER_NAME" >> tests.yml
+        echo "kittygram_domain: $DOMAIN" >> tests.yml
+        echo "dockerhub_username: $GITHUB_USER_NAME" >> tests.yml
+
   tests:
     runs-on: ubuntu-latest
     steps:
@@ -138,26 +158,6 @@ jobs:
           sudo docker compose -f docker-compose.production.yml exec backend python manage.py migrate
           sudo docker compose -f docker-compose.production.yml exec backend python manage.py collectstatic
           sudo docker compose -f docker-compose.production.yml exec backend cp -r /app/collected_static/. /backend_static/static/
-
-  auto_yandex_tests:
-    runs-on: ubuntu-latest
-    steps:
-    - name: Executing remote ssh commands to deploy
-      uses: appleboy/ssh-action@master
-      with:
-        host: ${{ secrets.HOST }}
-        username: ${{ secrets.USER }}
-        key: ${{ secrets.SSH_KEY }}
-    - shell: bash
-      env:
-        GITHUB_USER_NAME: ${{ secrets.GITHUB_USER_NAME }}
-        DOMAIN: ${{ secrets.DOMAIN }}
-        DOCKER_HUB_USER_NAME: ${{ secrets.DOCKER_HUB_USER_NAME }}
-      run: |
-        cd /opt/kittiygram
-        echo "repo_owner: $GITHUB_USER_NAME" >> tests.yml
-        echo "kittygram_domain: $DOMAIN" >> tests.yml
-        echo "dockerhub_username: $GITHUB_USER_NAME" >> tests.yml
 
   telegramm-notify:
     runs-on: ubuntu-latest
