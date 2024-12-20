@@ -9,22 +9,14 @@ services:
   frontend:
     hostname: frontend
     container_name: frontend
-    build:
-      context: ./frontend
+    image: kirillpudov/kittygram_frontend
     volumes:
       - static:/app/build
   
   backend:
     hostname: backend
     container_name: backend
-    build:
-      context: ./backend
-      args:
-      - BACK_DB_NAME=${BACK_DB_NAME}
-      - BACK_DB_USER=${BACK_DB_USER}
-      - BACK_USER_PASSWORD=${BACK_USER_PASSWORD}
-      - BACK_DB_HOST=${BACK_DB_HOST}
-      - BACK_DB_PORT=${BACK_DB_PORT}
+    image: kirillpudov/kittygram_backend
     env_file: ".env"
     volumes:
       - static:/app/frontend
@@ -36,8 +28,7 @@ services:
   gateway:
     hostname: gateway
     container_name: gateway
-    build:
-      context: ./nginx
+    image: kirillpudov/kittygram_gateway
     volumes:
       - static:/static
     ports:

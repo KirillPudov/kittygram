@@ -5,6 +5,9 @@ on:
     branches:
       - main
 
+concurrency:
+  group: ${{ github.head_ref ||  github.ref }}
+
 jobs:
   auto_yandex_tests:
     runs-on: ubuntu-latest
@@ -21,7 +24,7 @@ jobs:
         DOMAIN: ${{ secrets.DOMAIN }}
         DOCKER_HUB_USER_NAME: ${{ secrets.DOCKER_HUB_USER_NAME }}
       run: |
-        cd /opt/kittiygram
+        mkdir kittiygram && cd kittiygram
         echo "repo_owner: $GITHUB_USER_NAME" >> tests.yml
         echo "kittygram_domain: $DOMAIN" >> tests.yml
         echo "dockerhub_username: $GITHUB_USER_NAME" >> tests.yml
