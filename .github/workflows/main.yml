@@ -48,6 +48,7 @@ jobs:
         DOMAIN: ${{ secrets.DOMAIN }}
         DOCKER_HUB_USER_NAME: ${{ secrets.DOCKER_HUB_USER_NAME }}
       run: |
+        cd kittygram
         echo "repo_owner: $GITHUB_USER_NAME" >> tests.yml
         echo "kittygram_domain: $DOMAIN" >> tests.yml
         echo "dockerhub_username: $DOCKER_HUB_USER_NAME" >> tests.yml
