@@ -51,7 +51,6 @@ jobs:
         echo "repo_owner: $GITHUB_USER_NAME" >> tests.yml
         echo "kittygram_domain: $DOMAIN" >> tests.yml
         echo "dockerhub_username: $DOCKER_HUB_USER_NAME" >> tests.yml
-        cp .github/workflows/main.yaml kittygram_workflow.yml
     - name: Test pep8
       run: pytest tests
 
