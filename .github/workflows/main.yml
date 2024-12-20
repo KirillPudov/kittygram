@@ -18,7 +18,7 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install unittest pytest-pep8 pytest
+        pip install pytest-pep8 pytest==3.9.6
     - name: Test pep8
       run: pytest tests
 
