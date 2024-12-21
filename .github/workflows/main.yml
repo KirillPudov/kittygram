@@ -118,8 +118,8 @@ jobs:
         host: ${{ secrets.HOST }}
         username: ${{ secrets.USER }}
         key: ${{ secrets.SSH_KEY }}
-        source: "docker-compose.ayml"
-        target: "/opt/kittiygram"
+        source: "docker-compose.production.yml"
+        target: "./"
     - shell: bash
       env:
         BACK_DB_HOST: ${{ secrets.BACK_DB_HOST }}
@@ -129,7 +129,6 @@ jobs:
         POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
         PGDATA: ${{ secrets.PGDATA }}
       run: |
-        cd /opt/kittiygram
         echo "BACK_DB_HOST=$BACK_DB_HOST" >> .env
         echo "BACK_DB_PORT=$BACK_DB_PORT" >> .env
         echo "POSTGRES_USER=$POSTGRES_USER" >> .env
