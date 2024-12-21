@@ -210,7 +210,5 @@ jobs:
       run: |
         curl -X POST \
         -H 'Content-Type: application/json' \
-        -d '{"chat_id": "$TELEGRAMM_CHAT_ID", "text": "Deploy successfully!
-            👀 Push Author - ${{ github.actor }}
-            💬 Commit - https://github.com/${{ github.repository }}/commit/${{ github.sha }}"}' \
+        -d '{"chat_id": "$TELEGRAMM_CHAT_ID", "text": "Deploy successfully! 👀 Push Author - ${{ github.actor }} 💬 Commit - https://github.com/${{ github.repository }}/commit/${{ github.sha }}"}' \
         https://api.telegram.org/bot$TELEGRAMM_TOKEN/sendMessage
