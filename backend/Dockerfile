@@ -19,7 +19,7 @@ WORKDIR /app
 RUN apt update && apt install python3-dev libpq-dev -y &&\
     python3 -m venv env &&\
     python3 -m pip install --upgrade pip &&\
-    pip install -r requirements.txt && chmod +x /app/entrypoint.sh
+    pip install -r requirements.txt
 
 EXPOSE 8000
 
