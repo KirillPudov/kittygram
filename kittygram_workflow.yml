@@ -208,4 +208,4 @@ jobs:
         TELEGRAMM_TOKEN: ${{ secrets.TELEGRAMM_TOKEN }}
         TELEGRAMM_CHAT_ID: ${{ secrets.TELEGRAMM_CHAT_ID }}
       run: |
-        curl -X POST "https://api.telegram.org/bot$TELEGRAMM_TOKEN/sendMessage" -d "chat_id=$TELEGRAMM_CHAT_ID&text=Deploy successfully!"
+        curl -X POST "https://api.telegram.org/bot$TELEGRAMM_TOKEN/sendMessage" -d "chat_id=$TELEGRAMM_CHAT_ID&text=Deploy successfully!\n 👀 Push Author - ${{ github.actor }}\n Commit - https://github.com/${{ github.repository }}/commit/${{ github.sha }}"
