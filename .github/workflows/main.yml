@@ -32,7 +32,7 @@ jobs:
         echo "kittygram_domain: $DOMAIN" >> tests.yml
         echo "dockerhub_username: $DOCKER_HUB_USER_NAME" >> tests.yml
     - name: Test pep8
-      run: pytest tests/conftest.py
+      run: pytest tests
 
   build_and_push_to_docker_hub:
     name: Push Docker image to DockerHub
