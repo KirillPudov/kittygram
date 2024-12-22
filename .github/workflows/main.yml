@@ -187,8 +187,7 @@ jobs:
     - name: Run Yandex Tests
       run: pytest tests
 
-    telegramm-notify:
-    - name: Notify
+  telegramm-notify:
       runs-on: ubuntu-latest
       needs:
       - build_and_push_to_docker_hub
