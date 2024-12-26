@@ -17,7 +17,7 @@ services:
     image: kirillpudov/kittygram_backend
     env_file: ".env"
     volumes:
-      - static:/backend_static/static/
+      - static:/backend_static/
       - media:/app/media/
     depends_on:
       - postgres
