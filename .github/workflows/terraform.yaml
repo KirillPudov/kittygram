@@ -31,11 +31,11 @@ jobs:
         working-directory: ./infra
         if: ${{ inputs.exec == 'plan' }}
         run: |
-          export YANDEX_TOKEN=$YANDEX_TOKEN
-          export YANDEX_CLOUD_ID=$YANDEX_CLOUD_ID
-          export YANDEX_FOLDER_ID=$YANDEX_FOLDER_ID
-          export YANDEX_ZONE=$YANDEX_ZONE
-          export SSH_KEY=$SSH_KEY
+          export YANDEX_TOKEN="$YANDEX_TOKEN"
+          export YANDEX_CLOUD_ID="$YANDEX_CLOUD_ID"
+          export YANDEX_FOLDER_ID="$YANDEX_FOLDER_ID"
+          export YANDEX_ZONE="$YANDEX_ZONE"
+          export SSH_KEY="$SSH_KEY"
           terraform plan
         env:
           TF_VAR_YANDEX_TOKEN: ${{ secrets.YANDEX_TOKEN }}
