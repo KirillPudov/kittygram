@@ -21,6 +21,10 @@ on:
         required: true
       TF_VAR_SSH_KEY:
         required: true
+      TF_VAR_SECRET_KEY:
+        required: true
+      TF_VAR_ACCESS_KEY:
+        required: true
 
 jobs:
   terraform:
