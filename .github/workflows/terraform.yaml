@@ -48,7 +48,7 @@ jobs:
       - name: Terraform Plan
         working-directory: ./infra
         if: ${{ inputs.exec == 'plan' }}
-        run: terraform plan -backend-config="access_key=$TF_VAR_ACCESS_KEY" -backend-config="secret_key=$TF_VAR_SECRET_KEY"
+        run: terraform plan
         env:
           TF_VAR_YANDEX_TOKEN: ${{ secrets.TF_VAR_YANDEX_TOKEN }}
           TF_VAR_YANDEX_CLOUD_ID: ${{ secrets.TF_VAR_YANDEX_CLOUD_ID }}
@@ -62,7 +62,7 @@ jobs:
         working-directory: ./infra
         if: ${{ inputs.exec == 'apply' }}
         run: |
-          terraform apply -auto-approve -backend-config="access_key=$TF_VAR_ACCESS_KEY" -backend-config="secret_key=$TF_VAR_SECRET_KEY"
+          terraform apply -auto-approve
           echo "instance_ip_addr=`terraform output -raw instance_ip_addr` >> $GITHUB_OUTPUT"
         env:
           TF_VAR_YANDEX_TOKEN: ${{ secrets.TF_VAR_YANDEX_TOKEN }}
@@ -75,7 +75,7 @@ jobs:
       - name: Terraform destroy
         working-directory: ./infra
         if: ${{ inputs.exec == 'destroy' }}
-        run: terraform destroy -auto-approve -backend-config="access_key=$TF_VAR_ACCESS_KEY" -backend-config="secret_key=$TF_VAR_SECRET_KEY"
+        run: terraform destroy -auto-approve
         env:
           TF_VAR_YANDEX_TOKEN: ${{ secrets.TF_VAR_YANDEX_TOKEN }}
           TF_VAR_YANDEX_CLOUD_ID: ${{ secrets.TF_VAR_YANDEX_CLOUD_ID }}
