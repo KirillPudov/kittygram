@@ -30,7 +30,7 @@ jobs:
       - name: Terraform Plan
         working-directory: ./infra
         if: ${{ inputs.exec == 'plan' }}
-        run: terraform plan -var="YANDEX_TOKEN=${{ secrets.YANDEX_TOKEN }}" -var="YANDEX_CLOUD_ID=${{ secrets.YANDEX_CLOUD_ID }}" -var="YANDEX_FOLDER_ID=${{ secrets.YANDEX_FOLDER_ID }}" -var="YANDEX_ZONE=${{ secrets.YANDEX_ZONE }}" -var="SSH_KEY=${{ secrets.SSH_KEY }}" 
+        run: terraform plan -var="YANDEX_TOKEN=$YANDEX_TOKEN" -var="YANDEX_CLOUD_ID=$YANDEX_CLOUD_ID" -var="YANDEX_FOLDER_ID=$YANDEX_FOLDER_ID" -var="YANDEX_ZONE=$YANDEX_ZONE" -var="SSH_KEY=$SSH_KEY" 
         env:
           TF_VAR_YANDEX_TOKEN: ${{ secrets.YANDEX_TOKEN }}
           TF_VAR_YANDEX_CLOUD_ID: ${{ secrets.YANDEX_CLOUD_ID }}
