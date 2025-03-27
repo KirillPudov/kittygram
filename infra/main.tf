@@ -7,17 +7,17 @@ terraform {
 }
 
 provider "yandex" {
-  token     = var.yandex_token
-  cloud_id  = var.yandex_cloud_id
-  folder_id = var.yandex_folder_id
-  zone      = var.yandex_zone
+  token     = var.YANDEX_TOKEN
+  cloud_id  = var.YANDEX_CLOUD_ID
+  folder_id = var.YANDEX_FOLDER_ID
+  zone      = var.YANDEX_ZONE
 }
 
 resource "yandex_vpc_network" "kittygram-network" {}
 
 resource "yandex_vpc_subnet" "kittygram_subnet" {
   v4_cidr_blocks = ["192.168.1.0/24"]
-  zone           = var.yandex_zone
+  zone           = var.YANDEX_ZONE
   network_id     = yandex_vpc_network.kittygram-network.id
 }
 
@@ -50,7 +50,7 @@ resource "yandex_vpc_security_group" "sec-group" {
 resource "yandex_compute_disk" "kitty-vm" {
   name     = "kitty-vm"
   type     = "network-ssd"
-  zone     = "ru-central1-a"
+  zone     = var.YANDEX_ZONE
   size     = 10
   image_id = "fd82odtq5h79jo7ffss3"
 }
@@ -58,7 +58,7 @@ resource "yandex_compute_disk" "kitty-vm" {
 resource "yandex_compute_instance" "kitty-vm" {
   name        = "kitty-vm"
   platform_id = "standard-v1"
-  zone        = var.yandex_zone
+  zone        = var.YANDEX_ZONE
   network_interface {
     subnet_id = yandex_vpc_subnet.kittygram_subnet.id
     nat = true
@@ -79,7 +79,7 @@ resource "yandex_compute_instance" "kitty-vm" {
   }
 
   metadata = {
-    ssh-keys = "kittygram:${var.ssh_key}"
-    user-data  = templatefile("cloud-init.yaml.tftpl", {user = "kittygram", key = var.ssh_key})
+    ssh-keys = "kittygram:${var.SSH_KEY}"
+    user-data  = templatefile("cloud-init.yaml.tftpl", {user = "kittygram", key = var.SSH_KEY})
   }
 }

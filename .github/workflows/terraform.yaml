@@ -32,11 +32,11 @@ jobs:
         if: ${{ inputs.exec == 'plan' }}
         run: terraform plan
         env:
-          TF_VAR_yandex_token: ${{ secrets.YANDEX_TOKEN }}
-          TF_VAR_yandex_cloud_id: ${{ secrets.YANDEX_CLOUD_ID }}
-          TF_VAR_yandex_folder_id: ${{ secrets.YANDEX_FOLDER_ID }}
-          TF_VAR_yandex_zone: ${{ secrets.YANDEX_ZONE }}
-          TF_VAR_ssh_key: ${{ secrets.SSH_KEY }}
+          TF_VAR_YANDEX_TOKEN: ${{ secrets.YANDEX_TOKEN }}
+          TF_VAR_YANDEX_CLOUD_ID: ${{ secrets.YANDEX_CLOUD_ID }}
+          TF_VAR_YANDEX_FOLDER_ID: ${{ secrets.YANDEX_FOLDER_ID }}
+          TF_VAR_YANDEX_ZONE: ${{ secrets.YANDEX_ZONE }}
+          TF_VAR_SSH_KEY: ${{ secrets.SSH_KEY }}
       - name: Terraform apply
         id: apply
         working-directory: ./infra
@@ -45,18 +45,18 @@ jobs:
           terraform apply
           echo "ip_addr=`terraform output -raw instalce_ip_addr`"
         env:
-          TF_VAR_yandex_token: ${{ secrets.YANDEX_TOKEN }}
-          TF_VAR_yandex_cloud_id: ${{ secrets.YANDEX_CLOUD_ID }}
-          TF_VAR_yandex_folder_id: ${{ secrets.YANDEX_FOLDER_ID }}
-          TF_VAR_yandex_zone: ${{ secrets.YANDEX_ZONE }}
-          TF_VAR_ssh_key: ${{ secrets.SSH_KEY }}
+          TF_VAR_YANDEX_TOKEN: ${{ secrets.YANDEX_TOKEN }}
+          TF_VAR_YANDEX_CLOUD_ID: ${{ secrets.YANDEX_CLOUD_ID }}
+          TF_VAR_YANDEX_FOLDER_ID: ${{ secrets.YANDEX_FOLDER_ID }}
+          TF_VAR_YANDEX_ZONE: ${{ secrets.YANDEX_ZONE }}
+          TF_VAR_SSH_KEY: ${{ secrets.SSH_KEY }}
       - name: Terraform destroy
         working-directory: ./infra
         if: ${{ inputs.exec == 'destroy' }}
         run: terraform destroy
         env:
-          TF_VAR_yandex_token: ${{ secrets.YANDEX_TOKEN }}
-          TF_VAR_yandex_cloud_id: ${{ secrets.YANDEX_CLOUD_ID }}
-          TF_VAR_yandex_folder_id: ${{ secrets.YANDEX_FOLDER_ID }}
-          TF_VAR_yandex_zone: ${{ secrets.YANDEX_ZONE }}
-          TF_VAR_ssh_key: ${{ secrets.SSH_KEY }}
+          TF_VAR_YANDEX_TOKEN: ${{ secrets.YANDEX_TOKEN }}
+          TF_VAR_YANDEX_CLOUD_ID: ${{ secrets.YANDEX_CLOUD_ID }}
+          TF_VAR_YANDEX_FOLDER_ID: ${{ secrets.YANDEX_FOLDER_ID }}
+          TF_VAR_YANDEX_ZONE: ${{ secrets.YANDEX_ZONE }}
+          TF_VAR_SSH_KEY: ${{ secrets.SSH_KEY }}
