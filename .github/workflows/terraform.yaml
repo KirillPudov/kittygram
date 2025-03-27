@@ -9,7 +9,7 @@ on:
     outputs:
       instance_ip_addr:
         description: "IP addr of kitty-vm"
-        value: ${{ jobs.terraform.outputs.instance_ip_addr }}
+        value: ${{ jobs.apply.outputs.instance_ip_addr }}
     secrets:
       TF_VAR_YANDEX_TOKEN:
         required: true
@@ -27,10 +27,9 @@ on:
         required: true
 
 jobs:
-  terraform:
+  plan:
     runs-on: ubuntu-latest
-    outputs:
-      instance_ip_addr: ${{ steps.apply.outputs.instance_ip_addr }}
+    if: ${{ inputs.exec == 'plan' }}
     steps:
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2
@@ -57,17 +56,61 @@ jobs:
           TF_VAR_SSH_KEY: ${{ secrets.TF_VAR_SSH_KEY }}
           TF_VAR_SECRET_KEY: ${{ secrets.TF_VAR_SECRET_KEY }}
           TF_VAR_ACCESS_KEY: ${{ secrets.TF_VAR_ACCESS_KEY }}
+
+  apply:
+    runs-on: ubuntu-latest
+    if: ${{ inputs.exec == 'apply' }}
+    outputs:
+      instance_ip_addr: ${{ steps.output.outputs.instance_ip_addr }}
+    steps:
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: v1.11.2
+      - name: Check out code
+        uses: actions/checkout@v3
+      - name: Terraform init
+        working-directory: ./infra
+        run: |
+          TF_CLI_CONFIG_FILE=./.terraformrc terraform init --upgrade -backend-config="access_key=$TF_VAR_ACCESS_KEY" -backend-config="secret_key=$TF_VAR_SECRET_KEY"
+        env:
+          TF_VAR_SECRET_KEY: ${{ secrets.TF_VAR_SECRET_KEY }}
+          TF_VAR_ACCESS_KEY: ${{ secrets.TF_VAR_ACCESS_KEY }}
       - name: Terraform apply
         id: apply
         working-directory: ./infra
         if: ${{ inputs.exec == 'apply' }}
-        run: terraform apply -auto-approve && terraform output >> $GITHUB_OUTPUT
+        run: |
+          terraform apply -auto-approve 
+          terraform output >> $GITHUB_OUTPUT
         env:
           TF_VAR_YANDEX_TOKEN: ${{ secrets.TF_VAR_YANDEX_TOKEN }}
           TF_VAR_YANDEX_CLOUD_ID: ${{ secrets.TF_VAR_YANDEX_CLOUD_ID }}
           TF_VAR_YANDEX_FOLDER_ID: ${{ secrets.TF_VAR_YANDEX_FOLDER_ID }}
           TF_VAR_YANDEX_ZONE: ${{ secrets.TF_VAR_YANDEX_ZONE }}
           TF_VAR_SSH_KEY: ${{ secrets.TF_VAR_SSH_KEY }}
+          TF_VAR_SECRET_KEY: ${{ secrets.TF_VAR_SECRET_KEY }}
+          TF_VAR_ACCESS_KEY: ${{ secrets.TF_VAR_ACCESS_KEY }}
+      - name: Terraform output
+        id: output
+        run: terraform output >> $GITHUB_OUTPUT
+
+
+  destroy:
+    runs-on: ubuntu-latest
+    if: ${{ inputs.exec == 'destroy' }}
+    steps:
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: v1.11.2
+      - name: Check out code
+        uses: actions/checkout@v3
+      - name: Terraform init
+        working-directory: ./infra
+        run: |
+          TF_CLI_CONFIG_FILE=./.terraformrc terraform init --upgrade -backend-config="access_key=$TF_VAR_ACCESS_KEY" -backend-config="secret_key=$TF_VAR_SECRET_KEY"
+        env:
           TF_VAR_SECRET_KEY: ${{ secrets.TF_VAR_SECRET_KEY }}
           TF_VAR_ACCESS_KEY: ${{ secrets.TF_VAR_ACCESS_KEY }}
       - name: Terraform destroy
