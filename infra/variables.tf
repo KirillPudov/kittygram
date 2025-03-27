@@ -22,3 +22,13 @@ variable "SSH_KEY" {
   description = "ssh key"
   type        = string
 }
+
+variable "SECRET_KEY" {
+  description = "ssh key"
+  type        = string
+}
+
+variable "ACCESS_KEY" {
+  description = "ssh key"
+  type        = string
+}
