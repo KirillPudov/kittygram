@@ -24,11 +24,11 @@ variable "SSH_KEY" {
 }
 
 variable "SECRET_KEY" {
-  description = "ssh key"
+  description = "secret key"
   type        = string
 }
 
 variable "ACCESS_KEY" {
-  description = "ssh key"
+  description = "access key"
   type        = string
 }
