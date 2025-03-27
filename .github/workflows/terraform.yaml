@@ -26,8 +26,7 @@ jobs:
       - name: Terraform init
         working-directory: ./infra
         run: |
-          echo "provider_installation {network_mirror {url = "https://terraform-mirror.yandexcloud.net/"include = ["registry.terraform.io/*/*"]}direct {exclude = ["registry.terraform.io/*/*"]}}" > ~/.terraformrc
-          terraform init --upgrade
+          TF_CLI_CONFIG_FILE=./.terraformrc terraform init --upgrade
       - name: Terraform Plan
         working-directory: ./infra
         if: ${{ inputs.exec == 'plan' }}
