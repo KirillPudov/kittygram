@@ -158,7 +158,7 @@ jobs:
     - name: Copy docker-compose.yml via ssh
       uses: appleboy/scp-action@master
       with:
-        host: ${{ jobs.terraform.outputs.instance_ip_addr }}
+        host: ${{ needs.terraform.outputs.instance_ip_addr }}
         username: ${{ secrets.USER }}
         key: ${{ secrets.SSH_KEY }}
         source: "docker-compose.production.yml"
