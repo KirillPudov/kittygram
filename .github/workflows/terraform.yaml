@@ -61,9 +61,7 @@ jobs:
         id: apply
         working-directory: ./infra
         if: ${{ inputs.exec == 'apply' }}
-        run: |
-          terraform apply -auto-approve
-          terraform output >> $GITHUB_OUTPUT
+        run: terraform apply -auto-approve && terraform output >> $GITHUB_OUTPUT
         env:
           TF_VAR_YANDEX_TOKEN: ${{ secrets.TF_VAR_YANDEX_TOKEN }}
           TF_VAR_YANDEX_CLOUD_ID: ${{ secrets.TF_VAR_YANDEX_CLOUD_ID }}
