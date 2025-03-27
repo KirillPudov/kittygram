@@ -30,7 +30,7 @@ jobs:
       - name: Terraform Plan
         working-directory: ./infra
         if: ${{ inputs.exec == 'plan' }}
-        run: terraform plan
+        run: terraform plan -var="YANDEX_TOKEN=${{ secrets.YANDEX_TOKEN }}" -var="YANDEX_CLOUD_ID=${{ secrets.YANDEX_CLOUD_ID }}" -var="YANDEX_FOLDER_ID=${{ secrets.YANDEX_FOLDER_ID }}" -var="YANDEX_ZONE=${{ secrets.YANDEX_ZONE }}" -var="SSH_KEY=${{ secrets.SSH_KEY }}" 
         env:
           TF_VAR_YANDEX_TOKEN: ${{ secrets.YANDEX_TOKEN }}
           TF_VAR_YANDEX_CLOUD_ID: ${{ secrets.YANDEX_CLOUD_ID }}
@@ -42,7 +42,7 @@ jobs:
         working-directory: ./infra
         if: ${{ inputs.exec == 'apply' }}
         run: |
-          terraform apply
+          terraform apply -var="YANDEX_TOKEN=${{ secrets.YANDEX_TOKEN }}" -var="YANDEX_CLOUD_ID=${{ secrets.YANDEX_CLOUD_ID }}" -var="YANDEX_FOLDER_ID=${{ secrets.YANDEX_FOLDER_ID }}" -var="YANDEX_ZONE=${{ secrets.YANDEX_ZONE }}" -var="SSH_KEY=${{ secrets.SSH_KEY }}"
           echo "ip_addr=`terraform output -raw instalce_ip_addr`"
         env:
           TF_VAR_YANDEX_TOKEN: ${{ secrets.YANDEX_TOKEN }}
@@ -53,7 +53,7 @@ jobs:
       - name: Terraform destroy
         working-directory: ./infra
         if: ${{ inputs.exec == 'destroy' }}
-        run: terraform destroy
+        run: terraform destroy -var="YANDEX_TOKEN=${{ secrets.YANDEX_TOKEN }}" -var="YANDEX_CLOUD_ID=${{ secrets.YANDEX_CLOUD_ID }}" -var="YANDEX_FOLDER_ID=${{ secrets.YANDEX_FOLDER_ID }}" -var="YANDEX_ZONE=${{ secrets.YANDEX_ZONE }}" -var="SSH_KEY=${{ secrets.SSH_KEY }}"
         env:
           TF_VAR_YANDEX_TOKEN: ${{ secrets.YANDEX_TOKEN }}
           TF_VAR_YANDEX_CLOUD_ID: ${{ secrets.YANDEX_CLOUD_ID }}
