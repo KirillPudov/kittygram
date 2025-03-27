@@ -41,7 +41,10 @@ jobs:
       - name: Terraform init
         working-directory: ./infra
         run: |
-          TF_CLI_CONFIG_FILE=./.terraformrc terraform init --upgrade
+          TF_CLI_CONFIG_FILE=./.terraformrc terraform init --upgrade -backend-config="access_key=$TF_VAR_ACCESS_KEY" -backend-config="secret_key=$TF_VAR_SECRET_KEY"
+        env:
+          TF_VAR_SECRET_KEY: ${{ secrets.TF_VAR_SECRET_KEY }}
+          TF_VAR_ACCESS_KEY: ${{ secrets.TF_VAR_ACCESS_KEY }}
       - name: Terraform Plan
         working-directory: ./infra
         if: ${{ inputs.exec == 'plan' }}
