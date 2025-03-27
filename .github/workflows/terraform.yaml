@@ -7,9 +7,9 @@ on:
         required: true
         type: string
     outputs:
-      ip_addr:
+      instance_ip_addr:
         description: "IP addr of kitty-vm"
-        value: ${{ jobs.terraform.outputs.ip }}
+        value: ${{ jobs.terraform.outputs.instance_ip_addr }}
     secrets:
       TF_VAR_YANDEX_TOKEN:
         required: true
@@ -30,7 +30,7 @@ jobs:
   terraform:
     runs-on: ubuntu-latest
     outputs:
-      ip: ${{ steps.apply.outputs.ip }}
+      instance_ip_addr: ${{ steps.apply.outputs.instance_ip_addr }}
     steps:
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2

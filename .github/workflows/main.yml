@@ -154,7 +154,7 @@ jobs:
     - name: Copy docker-compose.yml via ssh
       uses: appleboy/scp-action@master
       with:
-        host: ${{ needs.terraform.outputs.ip_addr }}
+        host: ${{ needs.terraform.outputs.instance_ip_addr }}
         username: ${{ secrets.USER }}
         key: ${{ secrets.SSH_KEY }}
         source: "docker-compose.production.yml"
@@ -162,7 +162,7 @@ jobs:
     - name: Copy docker-compose.yml via ssh
       uses: appleboy/scp-action@master
       with:
-        host: ${{ needs.terraform.outputs.ip_addr }}
+        host: ${{ needs.terraform.outputs.instance_ip_addr }}
         username: ${{ secrets.USER }}
         key: ${{ secrets.SSH_KEY }}
         source: ".env"
@@ -170,7 +170,7 @@ jobs:
     - name: Executing remote ssh commands to deploy
       uses: appleboy/ssh-action@master
       with:
-        host: ${{ needs.terraform.outputs.ip_addr }}
+        host: ${{ needs.terraform.outputs.instance_ip_addr }}
         username: ${{ secrets.USER }}
         key: ${{ secrets.SSH_KEY }}
         script: | #Wait vm create
