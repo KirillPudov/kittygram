@@ -2,6 +2,10 @@ name: Terraform
 
 on:
   workflow_call:
+    inputs:
+      exec:
+        required: true
+        type: string
     outputs:
       ip_addr:
         description: "IP addr of kitty-vm"
@@ -24,7 +28,7 @@ jobs:
           terraform init --upgrade
       - name: Terraform Plan
         working-directory: ./infra
-        if: ${{ github.event.inputs.action == 'plan' }}
+        if: ${{ inputs.exec == 'plan' }}
         run: terraform plan
         env:
           TF_VAR_yandex_token: ${{ secrets.YANDEX_TOKEN }}
@@ -35,7 +39,7 @@ jobs:
       - name: Terraform apply
         id: apply
         working-directory: ./infra
-        if: ${{ github.event.inputs.action == 'apply' }}
+        if: ${{ inputs.exec == 'apply' }}
         run: |
           terraform apply
           echo "ip_addr=`terraform output -raw instalce_ip_addr`"
@@ -47,7 +51,7 @@ jobs:
           TF_VAR_ssh_key: ${{ secrets.SSH_KEY }}
       - name: Terraform destroy
         working-directory: ./infra
-        if: ${{ github.event.inputs.action == 'destroy' }}
+        if: ${{ inputs.exec == 'destroy' }}
         run: terraform destroy
         env:
           TF_VAR_yandex_token: ${{ secrets.YANDEX_TOKEN }}

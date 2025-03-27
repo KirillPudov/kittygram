@@ -21,7 +21,8 @@ concurrency:
 jobs:
   terraform:
     uses: ./.github/workflows/terraform.yaml
-    if: ${{ github.event.inputs.action == 'apply' }}
+    with:
+      exec: ${{ github.event.inputs.action }}
   tests:
     runs-on: ubuntu-latest
     steps:
