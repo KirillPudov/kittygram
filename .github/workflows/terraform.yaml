@@ -53,8 +53,8 @@ jobs:
         working-directory: ./infra
         if: ${{ inputs.exec == 'apply' }}
         run: |
-          terraform apply
-          echo "ip_addr=`terraform output -raw instalce_ip_addr`"
+          terraform apply -auto-approve
+          echo "ip_addr=`terraform output -raw instalce_ip_addr` >> $GITHUB_OUTPUT"
         env:
           TF_VAR_YANDEX_TOKEN: ${{ secrets.TF_VAR_YANDEX_TOKEN }}
           TF_VAR_YANDEX_CLOUD_ID: ${{ secrets.TF_VAR_YANDEX_CLOUD_ID }}
@@ -64,7 +64,7 @@ jobs:
       - name: Terraform destroy
         working-directory: ./infra
         if: ${{ inputs.exec == 'destroy' }}
-        run: terraform destroy
+        run: terraform destroy -auto-approve
         env:
           TF_VAR_YANDEX_TOKEN: ${{ secrets.TF_VAR_YANDEX_TOKEN }}
           TF_VAR_YANDEX_CLOUD_ID: ${{ secrets.TF_VAR_YANDEX_CLOUD_ID }}
