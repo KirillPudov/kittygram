@@ -10,6 +10,17 @@ on:
       ip_addr:
         description: "IP addr of kitty-vm"
         value: ${{ jobs.terraform.outputs.ip }}
+    secrets:
+      TF_VAR_YANDEX_TOKEN:
+        required: true
+      TF_VAR_YANDEX_CLOUD_ID:
+        required: true
+      TF_VAR_YANDEX_FOLDER_ID:
+        required: true
+      TF_VAR_YANDEX_ZONE:
+        required: true
+      TF_VAR_SSH_KEY:
+        required: true
 
 jobs:
   terraform:
@@ -38,11 +49,11 @@ jobs:
           export TF_VAR_SSH_KEY="$TF_VAR_SSH_KEY"
           terraform plan
         env:
-          TF_VAR_YANDEX_TOKEN: ${{ secrets.YANDEX_TOKEN }}
-          TF_VAR_YANDEX_CLOUD_ID: ${{ secrets.YANDEX_CLOUD_ID }}
-          TF_VAR_YANDEX_FOLDER_ID: ${{ secrets.YANDEX_FOLDER_ID }}
-          TF_VAR_YANDEX_ZONE: ${{ secrets.YANDEX_ZONE }}
-          TF_VAR_SSH_KEY: ${{ secrets.SSH_KEY }}
+          TF_VAR_YANDEX_TOKEN: ${{ secrets.TF_VAR_YANDEX_TOKEN }}
+          TF_VAR_YANDEX_CLOUD_ID: ${{ secrets.TF_VAR_YANDEX_CLOUD_ID }}
+          TF_VAR_YANDEX_FOLDER_ID: ${{ secrets.TF_VAR_YANDEX_FOLDER_ID }}
+          TF_VAR_YANDEX_ZONE: ${{ secrets.TF_VAR_YANDEX_ZONE }}
+          TF_VAR_SSH_KEY: ${{ secrets.TF_VAR_SSH_KEY }}
       - name: Terraform apply
         id: apply
         working-directory: ./infra

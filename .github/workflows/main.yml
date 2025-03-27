@@ -23,6 +23,12 @@ jobs:
     uses: ./.github/workflows/terraform.yaml
     with:
       exec: ${{ github.event.inputs.action }}
+    secrets:
+      TF_VAR_YANDEX_TOKEN: ${{ secrets.YANDEX_TOKEN }}
+      TF_VAR_YANDEX_CLOUD_ID: ${{ secrets.YANDEX_CLOUD_ID }}
+      TF_VAR_YANDEX_FOLDER_ID: ${{ secrets.YANDEX_FOLDER_ID }}
+      TF_VAR_YANDEX_ZONE: ${{ secrets.YANDEX_ZONE }}
+      TF_VAR_SSH_KEY: ${{ secrets.SSH_KEY }}
   tests:
     runs-on: ubuntu-latest
     steps:
