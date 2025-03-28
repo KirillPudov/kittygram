@@ -18,7 +18,7 @@ variable "YANDEX_ZONE" {
   type        = string
 }
 
-variable "SSH_KEY" {
+variable "PUB_SSH_KEY" {
   description = "ssh key"
   type        = string
 }
