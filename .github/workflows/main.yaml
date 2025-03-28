@@ -33,6 +33,9 @@ jobs:
       TF_VAR_ACCESS_KEY: ${{ secrets.ACCESS_KEY }}
   tests:
     runs-on: ubuntu-latest
+    if: ${{ github.event.inputs.action != 'plan' }}
+    needs:
+      - terraform
     steps:
     - name: Check out code
       uses: actions/checkout@v3
@@ -50,14 +53,15 @@ jobs:
         DOMAIN: ${{ secrets.DOMAIN }}
         DOCKER_HUB_USER_NAME: ${{ secrets.DOCKER_HUB_USER_NAME }}
       run: |
-        echo "repo_owner: $GITHUB_USER_NAME" >> tests.yml
-        echo "kittygram_domain: $DOMAIN" >> tests.yml
-        echo "dockerhub_username: $DOCKER_HUB_USER_NAME" >> tests.yml
+        echo "repo_owner: $GITHUB_USER_NAME" >> tests.yaml
+        echo "kittygram_domain: http://${{ needs.terraform.outputs.instance_ip_addr }}" >> tests.yaml
+        echo "dockerhub_username: $DOCKER_HUB_USER_NAME" >> tests.yaml
     - name: Test pep8
       run: python -m flake8 backend/
 
   build_and_push_to_docker_hub:
     name: Push Docker image to DockerHub
+    if: ${{ github.event.inputs.action != 'plan' }}
     runs-on: ubuntu-latest
     needs: tests
     steps:
@@ -85,6 +89,7 @@ jobs:
 
   build_frontend_and_push_to_docker_hub:
     name: Push Docker image to DockerHub
+    if: ${{ github.event.inputs.action != 'plan' }}
     runs-on: ubuntu-latest
     needs: tests
     steps:
@@ -106,6 +111,7 @@ jobs:
 
   build_gateway_and_push_to_docker_hub:
     name: Push Docker image to DockerHub
+    if: ${{ github.event.inputs.action != 'plan' }}
     runs-on: ubuntu-latest
     needs: tests
     steps:
@@ -210,9 +216,9 @@ jobs:
         DOMAIN: ${{ secrets.DOMAIN }}
         DOCKER_HUB_USER_NAME: ${{ secrets.DOCKER_HUB_USER_NAME }}
       run: |
-        echo "repo_owner: $GITHUB_USER_NAME" >> tests.yml
-        echo "kittygram_domain: http://${{ needs.terraform.outputs.instance_ip_addr }}" >> tests.yml
-        echo "dockerhub_username: $DOCKER_HUB_USER_NAME" >> tests.yml
+        echo "repo_owner: $GITHUB_USER_NAME" >> tests.yaml
+        echo "kittygram_domain: http://${{ needs.terraform.outputs.instance_ip_addr }}" >> tests.yaml
+        echo "dockerhub_username: $DOCKER_HUB_USER_NAME" >> tests.yaml
     - name: Run Yandex Tests
       run: pytest tests
 
