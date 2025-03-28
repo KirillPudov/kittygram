@@ -191,6 +191,7 @@ jobs:
       - build_and_push_to_docker_hub
       - build_frontend_and_push_to_docker_hub
       - build_gateway_and_push_to_docker_hub
+      - terraform
       - deploy
     steps:
     - name: Check out code
@@ -210,7 +211,7 @@ jobs:
         DOCKER_HUB_USER_NAME: ${{ secrets.DOCKER_HUB_USER_NAME }}
       run: |
         echo "repo_owner: $GITHUB_USER_NAME" >> tests.yml
-        echo "kittygram_domain: $DOMAIN" >> tests.yml
+        echo "kittygram_domain: http://${{ needs.terraform.outputs.instance_ip_addr }}" >> tests.yml
         echo "dockerhub_username: $DOCKER_HUB_USER_NAME" >> tests.yml
     - name: Run Yandex Tests
       run: pytest tests
