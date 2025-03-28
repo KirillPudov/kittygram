@@ -4,11 +4,33 @@ on:
   push:
     branches:
       - main
+  workflow_dispatch:
+    inputs:
+      action:
+        description: 'Select the Terraform action'
+        required: true
+        default: 'plan'
+        options:
+          - plan
+          - apply
+          - destroy
 
 concurrency:
   group: ${{ github.head_ref ||  github.ref }}
 
 jobs:
+  terraform:
+    uses: ./.github/workflows/terraform.yaml
+    with:
+      exec: ${{ github.event.inputs.action }}
+    secrets:
+      TF_VAR_YANDEX_TOKEN: ${{ secrets.YANDEX_TOKEN }}
+      TF_VAR_YANDEX_CLOUD_ID: ${{ secrets.YANDEX_CLOUD_ID }}
+      TF_VAR_YANDEX_FOLDER_ID: ${{ secrets.YANDEX_FOLDER_ID }}
+      TF_VAR_YANDEX_ZONE: ${{ secrets.YANDEX_ZONE }}
+      TF_VAR_PUB_SSH_KEY: ${{ secrets.PUB_SSH_KEY }}
+      TF_VAR_SECRET_KEY: ${{ secrets.SECRET_KEY }}
+      TF_VAR_ACCESS_KEY: ${{ secrets.ACCESS_KEY }}
   tests:
     runs-on: ubuntu-latest
     steps:
@@ -105,10 +127,12 @@ jobs:
 
   deploy:
     runs-on: ubuntu-latest
+    if: ${{ github.event.inputs.action == 'apply' }}
     needs:
       - build_and_push_to_docker_hub
       - build_frontend_and_push_to_docker_hub
       - build_gateway_and_push_to_docker_hub
+      - terraform
     steps:
     - name: Checkout repo
       uses: actions/checkout@v3
@@ -127,10 +151,14 @@ jobs:
         echo "POSTGRES_PASSWORD=$POSTGRES_PASSWORD" >> .env
         echo "POSTGRES_DB=$POSTGRES_DB" >> .env
         echo "PGDATA=$PGDATA" >> .env
+    - shell: bash
+      run: echo "$host"
+      env:
+        host: ${{ needs.terraform.outputs.instance_ip_addr }}
     - name: Copy docker-compose.yml via ssh
       uses: appleboy/scp-action@master
       with:
-        host: ${{ secrets.HOST }}
+        host: ${{ needs.terraform.outputs.instance_ip_addr }}
         username: ${{ secrets.USER }}
         key: ${{ secrets.SSH_KEY }}
         source: "docker-compose.production.yml"
@@ -138,7 +166,7 @@ jobs:
     - name: Copy docker-compose.yml via ssh
       uses: appleboy/scp-action@master
       with:
-        host: ${{ secrets.HOST }}
+        host: ${{ needs.terraform.outputs.instance_ip_addr }}
         username: ${{ secrets.USER }}
         key: ${{ secrets.SSH_KEY }}
         source: ".env"
@@ -146,10 +174,11 @@ jobs:
     - name: Executing remote ssh commands to deploy
       uses: appleboy/ssh-action@master
       with:
-        host: ${{ secrets.HOST }}
+        host: ${{ needs.terraform.outputs.instance_ip_addr }}
         username: ${{ secrets.USER }}
         key: ${{ secrets.SSH_KEY }}
-        script: |
+        script: | #Wait vm create
+          sleep 5m 
           sudo docker compose -f docker-compose.production.yml pull
           sudo docker compose -f docker-compose.production.yml down
           sudo docker compose -f docker-compose.production.yml up -d
@@ -162,6 +191,7 @@ jobs:
       - build_and_push_to_docker_hub
       - build_frontend_and_push_to_docker_hub
       - build_gateway_and_push_to_docker_hub
+      - terraform
       - deploy
     steps:
     - name: Check out code
@@ -181,7 +211,7 @@ jobs:
         DOCKER_HUB_USER_NAME: ${{ secrets.DOCKER_HUB_USER_NAME }}
       run: |
         echo "repo_owner: $GITHUB_USER_NAME" >> tests.yml
-        echo "kittygram_domain: $DOMAIN" >> tests.yml
+        echo "kittygram_domain: http://${{ needs.terraform.outputs.instance_ip_addr }}" >> tests.yml
         echo "dockerhub_username: $DOCKER_HUB_USER_NAME" >> tests.yml
     - name: Run Yandex Tests
       run: pytest tests

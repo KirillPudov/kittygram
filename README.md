@@ -1,24 +1,26 @@
-#  Как работать с репозиторием финального задания
+# Наполнение репозитория
+## Terraform
+`infra` - Папка с terraform скриптами для развертывания проекта
 
-## Что нужно сделать
-
-Настроить запуск проекта Kittygram в контейнерах и CI/CD с помощью GitHub Actions
-
-## Как проверить работу с помощью автотестов
-
-В корне репозитория создайте файл tests.yml со следующим содержимым:
-```yaml
-repo_owner: ваш_логин_на_гитхабе
-kittygram_domain: полная ссылка (http://<ip-адрес вашей ВМ>:<порт gateway>) на ваш проект Kittygram
-dockerhub_username: ваш_логин_на_докерхабе
+### Пример terraform.tfvars
+```
+YANDEX_TOKEN = ""
+YANDEX_CLOUD_ID = ""
+YANDEX_FOLDER_ID = ""
+YANDEX_ZONE = ""
+ACCESS_KEY = ""
+SECRET_KEY = ""
+PUB_SSH_KEY = ""
 ```
 
-Скопируйте содержимое файла `.github/workflows/main.yml` в файл `kittygram_workflow.yml` в корневой директории проекта.
+## Github Workflow
+`.github/workflows` - папка workflow
 
-Для локального запуска тестов создайте виртуальное окружение, установите в него зависимости из backend/requirements.txt и запустите в корневой директории проекта `pytest`.
+`terraform.yml` - Workflow для развёртывания workflow
 
-## Чек-лист для проверки перед отправкой задания
+`main.yml` - Основной workflow
 
-- Проект Kittygram доступен по ссылке, указанной в `tests.yml`.
-- Пуш в ветку main запускает тестирование и деплой Kittygram, а после успешного деплоя вам приходит сообщение в телеграм.
-- В корне проекта есть файл `kittygram_workflow.yml`.
+В `main.yml` происходит вызов `terraform.yml` workflow для создания, удаления и плана инфраструктуры
+
+# Результат
+### Результат работы можно посмотреть на ВМ с адресом, который можно найти в шаге `terraform.yml` с ID = `apply`
