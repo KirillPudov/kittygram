@@ -145,7 +145,7 @@ jobs:
         POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
         PGDATA: ${{ secrets.PGDATA }}
       run: |
-        sleep 5m
+        sleep 10m
         echo "BACK_DB_HOST=$BACK_DB_HOST" >> .env
         echo "BACK_DB_PORT=$BACK_DB_PORT" >> .env
         echo "POSTGRES_USER=$POSTGRES_USER" >> .env
