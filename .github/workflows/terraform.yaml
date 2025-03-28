@@ -66,6 +66,7 @@ jobs:
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2
         with:
+          terraform_wrapper: false
           terraform_version: v1.11.2
       - name: Check out code
         uses: actions/checkout@v3
