@@ -91,7 +91,9 @@ jobs:
           TF_VAR_SECRET_KEY: ${{ secrets.TF_VAR_SECRET_KEY }}
           TF_VAR_ACCESS_KEY: ${{ secrets.TF_VAR_ACCESS_KEY }}
       - id: output
-        run: IP=`terraform output -raw instance_ip_addr` echo "instance_ip_addr=$IP" >> $GITHUB_OUTPUT
+        run: |
+          IP=`terraform output -raw instance_ip_addr` echo "instance_ip_addr=$IP"
+          IP=`terraform output -raw instance_ip_addr` echo "instance_ip_addr=$IP" >> $GITHUB_OUTPUT
 
 
   destroy:
