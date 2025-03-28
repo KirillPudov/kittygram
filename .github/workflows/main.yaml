@@ -53,7 +53,7 @@ jobs:
         DOMAIN: ${{ secrets.DOMAIN }}
         DOCKER_HUB_USER_NAME: ${{ secrets.DOCKER_HUB_USER_NAME }}
       run: |
-        echo "repo_owner: $GITHUB_USER_NAME" >> tests.yml
+        echo "repo_owner: $GITHUB_USER_NAME" > tests.yml
         echo "kittygram_domain: http://${{ needs.terraform.outputs.instance_ip_addr }}" >> tests.yml
         echo "dockerhub_username: $DOCKER_HUB_USER_NAME" >> tests.yml
     - name: Test pep8
