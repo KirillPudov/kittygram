@@ -3,4 +3,4 @@ venv
 .terraform
 *.tfstate*
 *.tfvars
-*.lock.hcl*
+*.terraform.lock.hcl*
