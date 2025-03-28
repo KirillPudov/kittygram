@@ -28,7 +28,7 @@ jobs:
       TF_VAR_YANDEX_CLOUD_ID: ${{ secrets.YANDEX_CLOUD_ID }}
       TF_VAR_YANDEX_FOLDER_ID: ${{ secrets.YANDEX_FOLDER_ID }}
       TF_VAR_YANDEX_ZONE: ${{ secrets.YANDEX_ZONE }}
-      TF_VAR_SSH_KEY: ${{ secrets.SSH_KEY }}
+      TF_VAR_PUB_SSH_KEY: ${{ secrets.PUB_SSH_KEY }}
       TF_VAR_SECRET_KEY: ${{ secrets.SECRET_KEY }}
       TF_VAR_ACCESS_KEY: ${{ secrets.ACCESS_KEY }}
   tests:
