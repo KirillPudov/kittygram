@@ -83,6 +83,7 @@ jobs:
         if: ${{ inputs.exec == 'apply' }}
         run: |
           terraform apply -auto-approve
+          export IP=$(terraform output -raw instance_ip_addr) && echo "instance_ip_addr=$IP"
           IP=`terraform output -raw instance_ip_addr` echo "instance_ip_addr=$IP" >> $GITHUB_OUTPUT
         env:
           TF_VAR_YANDEX_TOKEN: ${{ secrets.TF_VAR_YANDEX_TOKEN }}
