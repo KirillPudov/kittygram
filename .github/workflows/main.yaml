@@ -145,6 +145,7 @@ jobs:
         POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
         PGDATA: ${{ secrets.PGDATA }}
       run: |
+        sleep 5m
         echo "BACK_DB_HOST=$BACK_DB_HOST" >> .env
         echo "BACK_DB_PORT=$BACK_DB_PORT" >> .env
         echo "POSTGRES_USER=$POSTGRES_USER" >> .env
@@ -178,7 +179,6 @@ jobs:
         username: ${{ secrets.USER }}
         key: ${{ secrets.SSH_KEY }}
         script: | #Wait vm create
-          sleep 5m 
           sudo docker compose -f docker-compose.production.yml pull
           sudo docker compose -f docker-compose.production.yml down
           sudo docker compose -f docker-compose.production.yml up -d
