@@ -170,14 +170,6 @@ jobs:
         key: ${{ secrets.SSH_KEY }}
         source: "docker-compose.production.yml"
         target: "./"
-    - name: Copy docker-compose.yml via ssh
-      uses: appleboy/scp-action@master
-      with:
-        host: ${{ needs.terraform.outputs.instance_ip_addr }}
-        username: ${{ secrets.USER }}
-        key: ${{ secrets.SSH_KEY }}
-        source: ".env"
-        target: "./"
     - name: Executing remote ssh commands to deploy
       uses: appleboy/ssh-action@master
       with:
@@ -188,9 +180,9 @@ jobs:
           sudo docker compose -f docker-compose.production.yml pull
           sudo docker compose -f docker-compose.production.yml down
           sudo docker compose -f docker-compose.production.yml up -d
+          sleep 2m
           sudo docker compose -f docker-compose.production.yml exec backend python manage.py migrate
           sudo docker compose -f docker-compose.production.yml exec backend python manage.py collectstatic --no-input
-          sleep 5m
 
   auto_yandex_tests:
     runs-on: ubuntu-latest
