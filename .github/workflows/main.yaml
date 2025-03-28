@@ -184,12 +184,13 @@ jobs:
         host: ${{ needs.terraform.outputs.instance_ip_addr }}
         username: ${{ secrets.USER }}
         key: ${{ secrets.SSH_KEY }}
-        script: | #Wait vm create
+        script: |
           sudo docker compose -f docker-compose.production.yml pull
           sudo docker compose -f docker-compose.production.yml down
           sudo docker compose -f docker-compose.production.yml up -d
           sudo docker compose -f docker-compose.production.yml exec backend python manage.py migrate
           sudo docker compose -f docker-compose.production.yml exec backend python manage.py collectstatic --no-input
+          sleep 5m
 
   auto_yandex_tests:
     runs-on: ubuntu-latest
